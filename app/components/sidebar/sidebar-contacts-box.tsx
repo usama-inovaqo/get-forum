@@ -3,10 +3,7 @@ import { Input } from "@headlessui/react";
 import { ForumContact, SidebarContactBox } from "@/app/types/contacts.types";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Dropdown from "@components/dropdown/dropdown";
-import {
-  AdjustmentsHorizontalIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import DropdownMenuItem from "../dropdown/dropdown-menu-item";
 import SidebarContact from "./sidebar-contact";
 
@@ -90,7 +87,15 @@ export default function SidebarContactsBox({
               {box.title}
             </div>
             <div className="text-gray-600">{box.domain && box.domain}</div>
-            <div className="text-md text-[#98A2B3]">{contacts.length}</div>
+            <div
+              className={`text-md text-[#98A2B3] ${
+                box.title.toLowerCase().includes("team") ? "font-bold" : ""
+              }`}
+            >
+              {`${box.title.toLowerCase().includes("team") ? "(" : ""}${
+                contacts.length
+              }${box.title.toLowerCase().includes("team") ? ")" : ""}`}
+            </div>
           </button>
         </div>
 
