@@ -8,22 +8,26 @@ import { trimEmailHtml } from "@/app/utils/trim-email-html";
 import { getEmailDomain } from "@/app/utils/get-email-domain";
 import SingleMessageProfilePicture from "./single-message-profile-picture";
 import { User } from "@clerk/nextjs/server";
-import { PencilSquareIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, ChevronDownIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 type SingleMessageProps = {
   user: User;
   message: NylasMessageWithContact;
   onRespondToMessage: (message: NylasMessage) => void;
+  onReplyToMessage: (message: NylasMessage) => void;
   isFirstMessage?: boolean;
   isFirstMessageOfToday?: boolean;
+  replyToMessage?: NylasMessageWithContact; // The original message this is replying to
 };
 
 export default function SingleMessage({
   user,
   message,
   onRespondToMessage,
+  onReplyToMessage,
   isFirstMessage = false,
   isFirstMessageOfToday = false,
+  replyToMessage,
 }: SingleMessageProps) {
   // Priority-based separator logic: Chat Beginning > Today > New
   const showChatBeginning = isFirstMessage;
@@ -59,9 +63,10 @@ export default function SingleMessage({
           <span className="w-full border-t border-[#B80045]"></span>
         </div>
       )}
+
       <div className="flex gap-4 items-start p-4 hover:bg-[#f3f4f7] rounded-xl w-full group">
         <SingleMessageProfilePicture user={user} message={message} />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 flex-1">
           <div className="flex items-center gap-2">
             {message.isFromUser
               ? user.firstName
@@ -82,17 +87,44 @@ export default function SingleMessage({
             <div
               className={`invisible ${
                 !message.isFromUser && "group-hover:visible"
-              } flex items-center`}
+              } flex items-center gap-1`}
             >
+              <button
+                onClick={() => onReplyToMessage(message)}
+                disabled={message.isFromUser}
+                className="p-1 hover:bg-[#E4E7EC] rounded disabled:opacity-50"
+                title="Reply to this message"
+              >
+                <ArrowUturnLeftIcon className="w-4 h-4" />
+              </button>
               <button
                 onClick={() => onRespondToMessage(message)}
                 disabled={message.isFromUser}
+                className="p-1 hover:bg-[#E4E7EC] rounded disabled:opacity-50"
+                title="Respond to this message"
               >
                 <PencilSquareIcon className="w-5 h-5" />
               </button>
             </div>
           </div>
-          {/* <div className="text-[#475467]">{trimEmailBody(message.body)}</div> */}
+
+          {/* Show quoted message if this is a reply */}
+          {replyToMessage && (
+            <div className="bg-[#F8F9FA] border-l-4 border-[#E4E7EC] rounded-r-lg p-3 mb-2">
+              <div className="text-xs text-[#667085] mb-2">
+                Subject: {replyToMessage.subject} • {new Date(replyToMessage.date * 1000).toLocaleDateString('en-US', { 
+                  month: 'long', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })} • {formatUnixTimestamp(replyToMessage.date, "time")}
+              </div>
+              <div className="text-sm text-[#475467]">
+                {replyToMessage.snippet || replyToMessage.body.replace(/<[^>]*>/g, '').substring(0, 200)}
+              </div>
+            </div>
+          )}
+
+          {/* Message content */}
           <div
             dangerouslySetInnerHTML={{ __html: trimEmailHtml(message.body) }}
           />

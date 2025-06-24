@@ -13,20 +13,26 @@ export default function SingleMessageProfilePicture({
   user,
   message,
 }: SingleMessageProfilePictureProps) {
+  // For user messages, always use user's image if available
+  const shouldUseUserImage = message.isFromUser && user?.imageUrl;
+  
+  // For other messages, use contact's picture if available
+  const contactHasPicture = !message.isFromUser && message.derivedContact.nylasContact?.picture_url;
+
   return (
     <div className="flex-shrink-0">
-      {message.derivedContact.nylasContact?.picture_url ? (
+      {(shouldUseUserImage || contactHasPicture) ? (
         <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-900">
           <Image
             src={
               message.isFromUser
                 ? user?.imageUrl
-                : message.derivedContact.nylasContact.picture_url
+                : message.derivedContact.nylasContact?.picture_url || ""
             }
             alt={
               message.isFromUser
                 ? "Your profile picture"
-                : `${message.derivedContact.nylasContact.given_name}'s profile picture`
+                : `${message.derivedContact.nylasContact?.given_name || message.derivedContact.derivedName}'s profile picture`
             }
             width={48}
             height={48}
@@ -37,7 +43,10 @@ export default function SingleMessageProfilePicture({
       ) : (
         <div className="flex items-center justify-center bg-gray-400 w-12 h-12 rounded-full flex-shrink-0 border-2 border-white">
           <div className="text-md font-semibold text-white">
-            {contactNameFallback(message.derivedContact)[0]}
+            {message.isFromUser 
+              ? (user?.firstName?.[0] || user?.emailAddresses?.[0]?.emailAddress?.[0] || "U") 
+              : contactNameFallback(message.derivedContact)[0]
+            }
           </div>
         </div>
       )}

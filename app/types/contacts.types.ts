@@ -4,7 +4,7 @@ export type ForumContact = {
   email: string;
   derivedName: string | undefined;
   latestMessage?: NylasThreadLatestDraftOrMessage;
-  nylasContact: NylasContact;
+  nylasContact?: NylasContact;
 };
 
 export type ForumContactsResponse = {

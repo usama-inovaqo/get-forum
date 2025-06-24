@@ -23,6 +23,7 @@ export interface NylasMessage {
   reply_to: NylasEmailAddress[];
   to: NylasEmailAddress[];
   date: number; // Unix timestamp
+  replyToMessageId?: string; // ID of the message this is replying to
 }
 
 export type NylasMessagesResponse = {

@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { useThreads } from "@/app/hooks/useThreads";
-import { NylasMessage } from "@/app/types/messages.types";
+import { NylasMessage, NylasMessageWithContact } from "@/app/types/messages.types";
 import { Conversation } from "@/app/conversations/conversations.types";
 import MessagesContainer from "./messages-container";
 import ParticipantsHeader from "../participants-header/participants-header";
@@ -8,11 +8,21 @@ import ParticipantsHeader from "../participants-header/participants-header";
 type ThreadsProps = {
   conversation: Conversation;
   onRespondToMessage: (message: NylasMessage) => void;
+  onReplyToMessage: (message: NylasMessage) => void;
+  replyToMessage?: NylasMessage;
+  onSendReply: (replyText: string, originalMessage: NylasMessage) => void;
+  onCancelReply: () => void;
+  dynamicReplies: NylasMessageWithContact[];
 };
 
 const ThreadsContainer = memo(function Threads({
   conversation,
   onRespondToMessage,
+  onReplyToMessage,
+  replyToMessage,
+  onSendReply,
+  onCancelReply,
+  dynamicReplies,
 }: ThreadsProps) {
   const { threads, isLoading, error } = useThreads(
     conversation.selectedContacts.map((contact) => contact.email),
@@ -53,6 +63,11 @@ const ThreadsContainer = memo(function Threads({
             <MessagesContainer
               messageIds={messageIdsForAllMessagesInThread}
               onRespondToMessage={onRespondToMessage}
+              onReplyToMessage={onReplyToMessage}
+              replyToMessage={replyToMessage}
+              onSendReply={onSendReply}
+              onCancelReply={onCancelReply}
+              dynamicReplies={dynamicReplies}
             />
           </div>
         )}
