@@ -79,9 +79,11 @@ export default function SidebarContactsBox({
             className="group flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronDownIcon
-              className={`rounded-lg p-1 w-7 h-7 text-gray-600 ${
-                contactBoxOpen ? "" : "-rotate-90"
-              }`}
+              className={`
+                w-5 h-5 text-gray-500
+                transition-transform duration-300 delay-100
+                ${contactBoxOpen ? 'rotate-180' : 'rotate-0'}
+              `}
             />
 
             <div className="flex items-center gap-1">
