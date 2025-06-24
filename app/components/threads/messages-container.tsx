@@ -5,6 +5,7 @@ import { SkeletonLoader } from "../skeleton-loader/skeleton-loader";
 import { useRef, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { NylasMessage } from "@/app/types/messages.types";
+import { isMessageFromToday } from "@/app/utils/format-unix-timestamp";
 
 type MessagesContainerProps = {
   messageIds: string[];
@@ -47,15 +48,30 @@ export default function MessagesContainer({
       {messages &&
         user &&
         messages.length > 0 &&
-        messages.map((message, index) => (
-          <div ref={index === 0 ? lastMessageRef : undefined} key={message.id}>
-            <SingleMessage
-              user={serializedUser}
-              message={message}
-              onRespondToMessage={onRespondToMessage}
-            />
-          </div>
-        ))}
+        messages.map((message, index) => {
+          // Check if this is the first message (chat beginning)
+          const isFirstMessage = index === messages.length - 1;
+          
+          // Check if "Today" separator has already been shown for a previous message
+          const todayAlreadyShown = messages.slice(index + 1).some(msg => 
+            isMessageFromToday(msg.date)
+          );
+          
+          // Check if this is the first message of today
+          const isFirstMessageOfToday = isMessageFromToday(message.date) && !todayAlreadyShown;
+          
+          return (
+            <div ref={index === 0 ? lastMessageRef : undefined} key={message.id}>
+              <SingleMessage
+                user={serializedUser}
+                message={message}
+                onRespondToMessage={onRespondToMessage}
+                isFirstMessage={isFirstMessage}
+                isFirstMessageOfToday={isFirstMessageOfToday}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 }

@@ -26,3 +26,14 @@ export const formatUnixTimestamp = (
       return date.toLocaleString([], { hour: "2-digit", minute: "2-digit" });
   }
 };
+
+export const isMessageFromToday = (timestamp: number): boolean => {
+  const messageDate = new Date(timestamp * 1000);
+  const today = new Date();
+  
+  return (
+    messageDate.getDate() === today.getDate() &&
+    messageDate.getMonth() === today.getMonth() &&
+    messageDate.getFullYear() === today.getFullYear()
+  );
+};

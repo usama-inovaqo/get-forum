@@ -45,9 +45,9 @@ export default function MiniComposer({
         onChange={(e) => onChange({ ...composedMessage, body: e.target.value })}
         disabled={disabledForm}
       />
-      <FaceSmileIcon className="w-8 h-8" />
-      <button type="submit" disabled={disabledSend}>
-        <PaperAirplaneIcon className="w-8 h-8 -rotate-45 -translate-y-0.5" />
+      <FaceSmileIcon className="w-6 h-6" />
+      <button type="submit" disabled={disabledSend} className="ml-3">
+        <PaperAirplaneIcon className="w-5 h-5 -rotate-45 -translate-y-0.5" />
       </button>
     </form>
   );
