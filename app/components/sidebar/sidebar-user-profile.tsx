@@ -12,7 +12,7 @@ type SidebarUserProfileProps = {
 export default function SidebarUserProfile({ user }: SidebarUserProfileProps) {
   return (
     <div className="col-span-2 flex flex-col gap-2 p-2">
-      <div className="flex md:flex-row md:items-center sm:flex-col sm:items-start justify-between gap-4 w-full">
+      <div className="flex flex-row items-center justify-between gap-4 w-full">
         {/* Avatar */}
         <div>
           <SidebarUserProfilePicture user={user} />
@@ -22,7 +22,7 @@ export default function SidebarUserProfile({ user }: SidebarUserProfileProps) {
         <div className="flex flex-col w-full">
           <div className="font-medium text-lg">{user.firstName}</div>
           <div className="flex items-center gap-1">
-            <div>Online</div>
+            <div className="text-[#98A2B3]">Online</div>
             <div>
               <ChevronDownIcon className="w-4 h-4 text-gray-900" />
             </div>

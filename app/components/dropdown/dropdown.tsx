@@ -55,7 +55,7 @@ function Dropdown({
       >
         <MenuItems
           anchor={anchor}
-          className={`z-10 bg-white rounded-xl shadow-lg py-2 mt-3 focus:outline-none min-w-[10rem] ${menuItemsClassName}`}
+          className={`z-50 bg-white rounded-xl shadow-lg py-2 mt-3 focus:outline-none min-w-[10rem] ${menuItemsClassName}`}
         >
           {items.map((item, idx) => (
             <MenuItem key={idx} as="div" className="w-full px-2">

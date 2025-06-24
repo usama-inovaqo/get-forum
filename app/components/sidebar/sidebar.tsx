@@ -321,7 +321,7 @@ export default function Sidebar({
             aria-label="Close sidebar backdrop"
           />
           {/* Drawer */}
-          <div className={`fixed top-0 left-0 z-50 h-full w-4/5 max-w-xs bg-white shadow-2xl transition-transform duration-300 md:hidden flex flex-col
+          <div className={`fixed top-0 left-0 z-50 h-full w-full max-w-xs bg-white shadow-2xl transition-transform duration-300 md:hidden flex flex-col
             ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
           >
             {/* Close button */}
