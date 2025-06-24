@@ -64,7 +64,7 @@ export default function SidebarContactsBox({
   }, [filteredContacts.length, search, searchOpen, contactBoxOpen]);
 
   return (
-    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F2F4F7]">
+    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F9FAFB]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 shrink-0">
           <button
@@ -79,7 +79,7 @@ export default function SidebarContactsBox({
             className="group flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronDownIcon
-              className={`rounded-lg p-1 group-hover:bg-[#F9FAFB] w-7 h-7 text-gray-600 ${
+              className={`rounded-lg p-1 w-7 h-7 text-gray-600 ${
                 contactBoxOpen ? "" : "-rotate-90"
               }`}
             />

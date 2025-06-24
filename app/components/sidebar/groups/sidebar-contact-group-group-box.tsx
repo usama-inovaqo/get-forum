@@ -15,7 +15,7 @@ export default function SidebarContactGroupGroupBox({
   onSelectContacts,
 }: SidebarContactGroupGroupBoxProps) {
   return (
-    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F2F4F7]">
+    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F9FAFB]">
       <div className="flex items-center gap-2 justify-between">
         <div className="flex items-center gap-2 shrink-0">
           <div className="group flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
