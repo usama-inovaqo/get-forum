@@ -219,11 +219,60 @@ export default function Sidebar({
   ];
 
   return (
-    <div className="col-span-2 py-4 px-2 flex flex-col gap-4 justify-between overflow-y-auto">
+    <div className="col-span-2 px-2 flex flex-col gap-4 justify-between overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <Link href="/">
-          <ForumLogo />
-        </Link>
+        {/* header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <Link href="/">
+              <ForumLogo />
+            </Link>
+          </div>
+
+          {/* menu */}
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              className="w-6 h-6 text-gray-900"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+              <circle cx="5" cy="12" r="1" />
+            </svg>
+          </div>
+        </div>
+
+        {/* search-forum */}
+        <div className="w-full flex justify-end items-center relative">
+          <input
+            placeholder="Search Forum"
+            className="border border-gray-300 rounded-full p-2 w-full"
+          />
+          {/* class="absolute mr-2 w-10" */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="absolute mr-2 w-10"
+          >
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+          </svg>
+        </div>
         {!contacts.contacts.length && <div>No contacts found</div>}
 
         {contactBoxes.map((box) => (
@@ -235,6 +284,8 @@ export default function Sidebar({
           />
         ))}
       </div>
+
+      {/* user-profile */}
       <SidebarUserProfile user={user} />
     </div>
   );

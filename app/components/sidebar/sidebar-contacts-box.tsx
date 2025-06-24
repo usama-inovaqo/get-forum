@@ -64,7 +64,7 @@ export default function SidebarContactsBox({
   }, [filteredContacts.length, search, searchOpen, contactBoxOpen]);
 
   return (
-    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F2F4F7]">
+    <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F9FAFB]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 shrink-0">
           <button
@@ -79,9 +79,11 @@ export default function SidebarContactsBox({
             className="group flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronDownIcon
-              className={`rounded-lg p-1 group-hover:bg-[#F9FAFB] w-7 h-7 text-gray-600 ${
-                contactBoxOpen ? "" : "-rotate-90"
-              }`}
+              className={`
+                w-5 h-5 text-gray-500
+                transition-transform duration-300 delay-100
+                ${contactBoxOpen ? 'rotate-180' : 'rotate-0'}
+              `}
             />
 
             <div className="flex items-center gap-1">
@@ -96,12 +98,26 @@ export default function SidebarContactsBox({
           </button>
         </div>
 
+        {/* dropdown */}
         <div className="text-sm text-[#98A2B3]">
           <Dropdown
             button={
-              <AdjustmentsHorizontalIcon
-                className={`w-5 h-5 ${search ? "text-[#475467]" : ""}`}
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className={`w-5 h-5 ${search ? "text-[#475467]" : "text-gray-600"}`}
+              >
+                <path d="M3 6h18" />
+                <path d="M7 12h10" />
+                <path d="M10 18h4" />
+              </svg>
             }
             items={[
               <DropdownMenuItem
@@ -157,8 +173,10 @@ export default function SidebarContactsBox({
           />
         </div>
       </div>
+
+      {/* contacts */}
       <div
-        className={`${
+        className={`gap-2 ${
           contactBoxOpen ? "block max-h-[1000px]" : "hidden max-h-0"
         } overflow-y-auto transition-all duration-300`}
       >
