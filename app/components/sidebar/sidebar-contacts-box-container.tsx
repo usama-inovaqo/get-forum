@@ -59,14 +59,14 @@ export default function SidebarContactsBoxContainer({
 
   return (
     <div>
-      {box.group && box.contacts && (
+      {/* {box.group && box.contacts && (
         <SidebarContactGroupGroupBox
           groupName="Forum Group"
           contacts={box.contacts}
           selectedContacts={selectedContacts}
           onSelectContacts={onSelectContacts}
         />
-      )}
+      )} */}
       {!box.group && (
         <SidebarContactsBox
           box={box}
