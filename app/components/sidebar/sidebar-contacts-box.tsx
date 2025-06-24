@@ -96,12 +96,26 @@ export default function SidebarContactsBox({
           </button>
         </div>
 
+        {/* dropdown */}
         <div className="text-sm text-[#98A2B3]">
           <Dropdown
             button={
-              <AdjustmentsHorizontalIcon
-                className={`w-5 h-5 ${search ? "text-[#475467]" : ""}`}
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className={`w-5 h-5 ${search ? "text-[#475467]" : "text-gray-600"}`}
+              >
+                <path d="M3 6h18" />
+                <path d="M7 12h10" />
+                <path d="M10 18h4" />
+              </svg>
             }
             items={[
               <DropdownMenuItem
@@ -157,8 +171,10 @@ export default function SidebarContactsBox({
           />
         </div>
       </div>
+
+      {/* contacts */}
       <div
-        className={`${
+        className={`gap-2 ${
           contactBoxOpen ? "block max-h-[1000px]" : "hidden max-h-0"
         } overflow-y-auto transition-all duration-300`}
       >

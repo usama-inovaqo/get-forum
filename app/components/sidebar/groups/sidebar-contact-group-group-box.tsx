@@ -30,7 +30,7 @@ export default function SidebarContactGroupGroupBox({
           </div>
         </div>
       </div>
-      <div className="max-h-[1000px] overflow-y-auto transition-all duration-300 flex flex-col gap-2">
+      <div className="max-h-[1000px] overflow-y-auto hover:bg-gray-50 transition-all duration-300 flex flex-col gap-2">
         <button
           onClick={() => onSelectContacts(contacts)}
           className={`flex flex-wrap hover:bg-[#F9FAFB] rounded-xl p-2 ${

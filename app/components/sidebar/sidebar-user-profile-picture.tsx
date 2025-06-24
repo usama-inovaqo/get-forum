@@ -9,7 +9,7 @@ export default function SidebarUserProfilePicture({
   user,
 }: SidebarUserProfilePictureProps) {
   return (
-    <div className="w-12 h-12 rounded-full">
+    <div className="size-10 rounded-full ring-1 ring-white">
       {user.imageUrl ? (
         <Image
           src={user.imageUrl}
@@ -19,7 +19,7 @@ export default function SidebarUserProfilePicture({
           className="rounded-full"
         />
       ) : (
-        <div className="flex items-center justify-center rounded-full bg-gray-400 border-2 border-white w-full h-full">
+        <div className="flex size-10 rounded-full ring-1 ring-white">
           <div className="text-md font-semibold text-white">
             {user.firstName?.[0]}
           </div>
