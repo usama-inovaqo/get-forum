@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Clerk button */
+.cl-internal-ttumny[data-variant="solid"]::after {
+  background: #e1114a !important;
+}
+
+/* TinyMCE fixes */
+.tox-tinymce {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.tox-toolbar__group {
+  border-right: 1px solid #D8DDE5 !important;
+}
+.tox-statusbar__branding {
+  display: none !important;
+}
+
+/*.tox-editor-header, .tox-toolbar-overlord {
+  background-color: #f9fafb !important;
+}
+[data-mce-name="sendmessage"]  {
+  background-color: #d8275d !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 1rem !important;
+  width: 100% !important;
+  font-weight: 700 !important;
+}
+[data-mce-name="sendmessage"] svg {
+  fill: none !important;
+}*/

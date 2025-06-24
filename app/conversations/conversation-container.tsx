@@ -1,0 +1,151 @@
+// TODO the conversation container should be loading a conversation in its entirety, not deriving the threads, latest message, etc. from the contacts.
+// Maybe make a NextJS route that gets everything and returns a conversation object?
+"use client";
+import { useState, useCallback, useEffect } from "react";
+import {
+  ForumContact,
+  ForumContactsResponse,
+} from "@/app/types/contacts.types";
+import Sidebar from "../components/sidebar/sidebar";
+import { User } from "@clerk/nextjs/server";
+import ForumLogo from "../components/logo/forum-logo";
+import ComposerContainer from "../components/composer/composer-container";
+import { NylasMessage } from "../types/messages.types";
+import { ComposedMessage } from "../components/composer/composer.types";
+import { Conversation } from "./conversations.types";
+import ThreadsContainer from "../components/threads/threads-container";
+import { useContacts } from "../hooks/useContacts";
+
+type ConversationContainerProps = {
+  initialContacts: ForumContactsResponse;
+  user: User;
+};
+
+export default function ConversationContainer({
+  initialContacts,
+  user,
+}: ConversationContainerProps) {
+  const { contactsResponse, isLoading, error } = useContacts(30000);
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+  const [useableContacts, setUseableContacts] =
+    useState<ForumContactsResponse>(initialContacts);
+
+  const [messageToRespondTo, setMessageToRespondTo] = useState<
+    ComposedMessage | undefined
+  >(undefined); // TODO we may not need this piece of state
+
+  // TODO clean this up when upgrading to websockets
+  // TODO set conversation isn't working. Fix and then use as key for sidebar.
+  const handleComposerSuccess = useCallback(
+    (response: NylasMessage | string) => {
+      console.log("success: ", response);
+      if (!conversation) return;
+      if (response && !conversation.selectedContacts.length) {
+        const nylasContact = useableContacts.contacts.find(
+          (contact) => contact.nylasContact.emails[0].email === response
+        );
+        const forumContact: ForumContact | null = nylasContact
+          ? {
+              email: nylasContact.nylasContact.emails[0].email,
+              derivedName: nylasContact.nylasContact.given_name,
+              nylasContact: nylasContact.nylasContact,
+            }
+          : null;
+        if (forumContact) {
+          setConversation({
+            ...conversation,
+            selectedContacts: [forumContact],
+          });
+        }
+      }
+      setConversation({
+        ...conversation,
+        latestMessage: response as NylasMessage,
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const handleRespondToMessage = useCallback((message: NylasMessage) => {
+    console.log("handleRespondToMessage: ", message);
+    const composedMessage: ComposedMessage = {
+      recipients: {
+        to: message.from[0].email,
+        cc: message.cc.map((cc) => cc.email).join(","),
+        bcc: message.bcc.map((bcc) => bcc.email).join(","),
+      },
+      subject: message.subject,
+      body: "",
+      replyToMessageId: message.id,
+    };
+    setMessageToRespondTo(composedMessage);
+  }, []);
+
+  useEffect(() => {
+    if (contactsResponse && !isLoading && !error) {
+      setUseableContacts(contactsResponse);
+    }
+  }, [contactsResponse, isLoading, error]);
+
+  console.log("conversation: ", conversation);
+
+  return (
+    <div className="h-full">
+      <div className="h-full overflow-hidden grid grid-cols-10 bg-[#fcfcfd] divide-x-2 divide-[#D0D5DD] text-gray-900">
+        {/* Sidebar */}
+        <Sidebar
+          key={conversation?.selectedContacts.length}
+          user={user}
+          contacts={useableContacts}
+          selectedContacts={conversation?.selectedContacts || []}
+          onSetConversation={(contacts) =>
+            setConversation({
+              ...conversation,
+              selectedContacts: contacts,
+            })
+          }
+        />
+        {/* Empty Conversation (no contacts selected) */}
+        <div className="col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
+          {!conversation?.selectedContacts.length && (
+            <div className="bg-[#F2F4F7] flex justify-center items-center h-full rounded-xl m-4">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <ForumLogo />
+                <p className="text-sm font-medium text-[#98A2B3]">
+                  Select a contact or start a new conversation
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Conversation Content */}
+          {conversation?.selectedContacts.length &&
+            conversation?.selectedContacts.length > 0 && (
+              <ThreadsContainer
+                key={
+                  conversation.selectedContacts.length +
+                  conversation.selectedContacts[0]?.email
+                }
+                conversation={conversation}
+                onRespondToMessage={handleRespondToMessage}
+              />
+            )}
+
+          {/* Composer */}
+          <div className="p-4">
+            <ComposerContainer
+              key={conversation?.selectedContacts[0]?.email ?? "new"}
+              contacts={contactsResponse || initialContacts}
+              selectedContacts={conversation?.selectedContacts || []}
+              disabledForm={!conversation?.selectedContacts.length}
+              disabledSend={!conversation?.selectedContacts[0]}
+              onSuccess={handleComposerSuccess}
+              defaultComposedMessage={messageToRespondTo}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
