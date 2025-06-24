@@ -22,7 +22,7 @@ export default function SidebarContact({
 
   return (
     <button
-      className={`w-full grid grid-cols-10 items-center rounded-xl py-4 px-2 hover:bg-[#F9FAFB] ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
+      className={`w-full grid grid-cols-10 items-center rounded-xl py-4 px-2 hover:bg-gray-50 ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
         ? "bg-[#F9FAFB]"
         : ""
         }`}
