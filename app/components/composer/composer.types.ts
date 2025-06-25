@@ -11,6 +11,7 @@ export type ComposedMessage = {
   subject: string;
   body: string;
   replyToMessageId?: string;
+  isReply?: boolean; // true for direct reply, false/undefined for regular response
 };
 
 export type ComposedMessagePayload = {
@@ -21,4 +22,5 @@ export type ComposedMessagePayload = {
   subject: string;
   body: string;
   reply_to_message_id?: string;
+  is_reply?: boolean;
 };

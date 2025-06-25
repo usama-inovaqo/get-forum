@@ -3,10 +3,7 @@ import { Input } from "@headlessui/react";
 import { ForumContact, SidebarContactBox } from "@/app/types/contacts.types";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Dropdown from "@components/dropdown/dropdown";
-import {
-  AdjustmentsHorizontalIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import DropdownMenuItem from "../dropdown/dropdown-menu-item";
 import SidebarContact from "./sidebar-contact";
 
@@ -65,7 +62,7 @@ export default function SidebarContactsBox({
 
   return (
     <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F9FAFB]">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-2 shrink-0">
           <button
             title={contactBoxOpen ? "Collapse contacts" : "Expand contacts"}
@@ -79,29 +76,56 @@ export default function SidebarContactsBox({
             className="group flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronDownIcon
-              className={`rounded-lg p-1 w-7 h-7 text-gray-600 ${
-                contactBoxOpen ? "" : "-rotate-90"
-              }`}
+              className={`
+                w-5 h-5 text-gray-500
+                transition-transform duration-300 delay-100
+                ${contactBoxOpen ? "rotate-180" : "rotate-0"}
+              `}
             />
 
-            <div className="flex items-center gap-1">
-              <div className="text-xl font-semibold text-gray-600">
-                {box.title}
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-1">
+                <div className="text-xl font-semibold text-gray-600">
+                  {box.title}
+                </div>
+                <div
+                  className={`text-md text-[#98A2B3] ${
+                    box.title.toLowerCase().includes("team") ? "font-bold" : ""
+                  }`}
+                >
+                  {`${box.title.toLowerCase().includes("team") ? "(" : ""}${
+                    contacts.length
+                  }${box.title.toLowerCase().includes("team") ? ")" : ""}`}
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-sm font-medium">
-                <div className="text-gray-600">{box.domain && box.domain}</div>
-                <div className="text-[#98A2B3]">{contacts.length}</div>
-              </div>
+              <div className="text-gray-600">{box.domain && box.domain}</div>
             </div>
           </button>
         </div>
 
+        {/* dropdown */}
         <div className="text-sm text-[#98A2B3]">
           <Dropdown
+            disabled={contacts.length < 3}
             button={
-              <AdjustmentsHorizontalIcon
-                className={`w-5 h-5 ${search ? "text-[#475467]" : ""}`}
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className={`w-5 h-5 ${
+                  search ? "text-[#475467]" : "text-gray-600"
+                }`}
+              >
+                <path d="M3 6h18" />
+                <path d="M7 12h10" />
+                <path d="M10 18h4" />
+              </svg>
             }
             items={[
               <DropdownMenuItem
@@ -157,10 +181,15 @@ export default function SidebarContactsBox({
           />
         </div>
       </div>
+
+      {/* contacts */}
       <div
-        className={`${
-          contactBoxOpen ? "block max-h-[1000px]" : "hidden max-h-0"
-        } overflow-y-auto transition-all duration-300`}
+        className={`
+          gap-2
+          overflow-y-auto overflow-hidden
+          transition-all duration-500 delay-100
+          ${contactBoxOpen ? "max-h-[17rem]" : "max-h-0"}
+        `}
       >
         {displayedContacts.map((contact) => (
           <SidebarContact

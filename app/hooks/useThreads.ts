@@ -9,18 +9,17 @@ export function useThreads(
 ) {
   const [threads, setThreads] = useState<NylasThread[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    const isInitialLoad = !isLoaded; // Track if this is the first load
+    let hasLoaded = false;
 
     async function fetchThreads() {
       if (!mounted) return;
 
       // Only show loading on initial load
-      if (isInitialLoad) {
+      if (!hasLoaded) {
         setIsLoading(true);
       }
       setError(null);
@@ -53,12 +52,14 @@ export function useThreads(
             }
             return prevThreads;
           });
-          setIsLoaded(true);
+          hasLoaded = true;
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     }
 
@@ -69,12 +70,12 @@ export function useThreads(
       mounted = false;
       clearInterval(intervalId);
     };
-  }, [participantEmails, limit, refreshInterval, isLoaded]);
+  }, [participantEmails, limit, refreshInterval]);
 
   // Memoize the return value
   const returnValue = useMemo(() => {
-    return { threads, isLoading, isLoaded, error };
-  }, [threads, isLoading, isLoaded, error]);
+    return { threads, isLoading, error };
+  }, [threads, isLoading, error]);
 
   return returnValue;
 }

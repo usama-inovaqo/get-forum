@@ -109,9 +109,9 @@ export default function ComposerContainer({
   const handleConfirmCloseFullComposer = () => {
     setConfirmDialog({
       isOpen: true,
-      title: "Switch to Mini Composer?",
+      title: "Back to conversation view?",
       description:
-        "This will close the full composer and remove any formatting you've added.",
+        "Going back to conversation view will undo your message formatting.",
       onCancel: () =>
         setConfirmDialog({
           ...confirmDialog,
@@ -187,9 +187,9 @@ export default function ComposerContainer({
           onClick={() => setVariant(variant === "mini" ? "full" : "mini")}
         >
           {variant === "mini" ? (
-            <PlusCircleIcon className="w-8 h-8" />
+            <PlusCircleIcon className="w-6 h-6" />
           ) : (
-            <MinusCircleIcon className="w-8 h-8" />
+            <MinusCircleIcon className="w-6 h-6" />
           )}
         </button>
 

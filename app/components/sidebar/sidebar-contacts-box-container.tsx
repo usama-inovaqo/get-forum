@@ -2,7 +2,7 @@
 import { ForumContact, SidebarContactBox } from "@/app/types/contacts.types";
 import { useState, useMemo, useCallback } from "react";
 import SidebarContactsBox from "./sidebar-contacts-box";
-import SidebarContactGroupGroupBox from "./groups/sidebar-contact-group-group-box";
+// import SidebarContactGroupGroupBox from "./groups/sidebar-contact-group-group-box";
 
 type SidebarContactsBoxContainerProps = {
   box: SidebarContactBox;
@@ -59,14 +59,14 @@ export default function SidebarContactsBoxContainer({
 
   return (
     <div>
-      {box.group && box.contacts && (
+      {/* {box.group && box.contacts && (
         <SidebarContactGroupGroupBox
           groupName="Forum Group"
           contacts={box.contacts}
           selectedContacts={selectedContacts}
           onSelectContacts={onSelectContacts}
         />
-      )}
+      )} */}
       {!box.group && (
         <SidebarContactsBox
           box={box}

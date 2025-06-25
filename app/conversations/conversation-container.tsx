@@ -10,7 +10,7 @@ import Sidebar from "../components/sidebar/sidebar";
 import { User } from "@clerk/nextjs/server";
 import ForumLogo from "../components/logo/forum-logo";
 import ComposerContainer from "../components/composer/composer-container";
-import { NylasMessage } from "../types/messages.types";
+import { NylasMessage, NylasMessageWithContact } from "../types/messages.types";
 import { ComposedMessage } from "../components/composer/composer.types";
 import { Conversation } from "./conversations.types";
 import ThreadsContainer from "../components/threads/threads-container";
@@ -29,10 +29,13 @@ export default function ConversationContainer({
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [useableContacts, setUseableContacts] =
     useState<ForumContactsResponse>(initialContacts);
-
+  const [sidebarOpen, setSidebarOpen] = useState(false); // for mobile drawer
   const [messageToRespondTo, setMessageToRespondTo] = useState<
     ComposedMessage | undefined
   >(undefined); // TODO we may not need this piece of state
+
+  const [replyToMessage, setReplyToMessage] = useState<NylasMessage | undefined>(undefined);
+  const [dynamicReplies, setDynamicReplies] = useState<NylasMessageWithContact[]>([]);
 
   // TODO clean this up when upgrading to websockets
   // TODO set conversation isn't working. Fix and then use as key for sidebar.
@@ -42,12 +45,12 @@ export default function ConversationContainer({
       if (!conversation) return;
       if (response && !conversation.selectedContacts.length) {
         const nylasContact = useableContacts.contacts.find(
-          (contact) => contact.nylasContact.emails[0].email === response
+          (contact) => contact.nylasContact?.emails[0].email === response
         );
         const forumContact: ForumContact | null = nylasContact
           ? {
-              email: nylasContact.nylasContact.emails[0].email,
-              derivedName: nylasContact.nylasContact.given_name,
+              email: nylasContact.nylasContact?.emails[0].email || "",
+              derivedName: nylasContact.nylasContact?.given_name,
               nylasContact: nylasContact.nylasContact,
             }
           : null;
@@ -78,8 +81,76 @@ export default function ConversationContainer({
       subject: message.subject,
       body: "",
       replyToMessageId: message.id,
+      isReply: false, // This is a regular response, not a direct reply
     };
     setMessageToRespondTo(composedMessage);
+    setReplyToMessage(undefined); // Clear any active reply
+  }, []);
+
+  const handleReplyToMessage = useCallback((message: NylasMessage) => {
+    console.log("handleReplyToMessage: ", message);
+    setReplyToMessage(message);
+    setMessageToRespondTo(undefined); // Clear any email response
+  }, []);
+
+  const handleSendReply = useCallback((replyText: string, originalMessage: NylasMessage) => {
+    if (!conversation || !user) return;
+
+    // Create a new message that's a reply to the original
+    const newReplyMessage: NylasMessage = {
+      starred: false,
+      unread: false,
+      folders: ["INBOX"],
+      subject: originalMessage.subject,
+      thread_id: originalMessage.thread_id,
+      body: `<p>${replyText}</p>`,
+      grant_id: "grant_123",
+      id: `reply_${Date.now()}`,
+      object: "message",
+      snippet: replyText.substring(0, 100),
+      bcc: [],
+      cc: [],
+      attachments: [],
+      from: [{ email: user.emailAddresses[0].emailAddress }],
+      reply_to: [{ email: user.emailAddresses[0].emailAddress }],
+      to: originalMessage.from,
+      date: Math.floor(Date.now() / 1000),
+      replyToMessageId: originalMessage.id,
+    };
+
+    // Find the original message with contact info for proper quoting
+    const originalMessageWithContact = useableContacts.contacts.find(
+      contact => contact.email === originalMessage.from[0].email
+    );
+
+    // Create the message with contact info for display
+    const newReplyMessageWithContact: NylasMessageWithContact = {
+      ...newReplyMessage,
+      derivedContact: {
+        email: user.emailAddresses[0].emailAddress,
+        derivedName: user.firstName || "You",
+        nylasContact: undefined,
+      },
+      isFromUser: true,
+    };
+
+    // Add this message to our dynamic replies
+    setDynamicReplies(prev => [...prev, newReplyMessageWithContact]);
+
+    // Also update the conversation's latest message
+    setConversation(prev => ({
+      ...prev!,
+      latestMessage: newReplyMessage,
+    }));
+
+    // Clear the reply state
+    setReplyToMessage(undefined);
+    
+    console.log("Reply sent:", newReplyMessage);
+  }, [user, conversation, useableContacts]);
+
+  const handleCancelReply = useCallback(() => {
+    setReplyToMessage(undefined);
   }, []);
 
   useEffect(() => {
@@ -88,10 +159,25 @@ export default function ConversationContainer({
     }
   }, [contactsResponse, isLoading, error]);
 
+  // Clear dynamic replies when conversation changes
+  useEffect(() => {
+    setDynamicReplies([]);
+  }, [conversation?.selectedContacts]);
+
   console.log("conversation: ", conversation);
 
   return (
     <div className="h-full">
+      {/* Hamburger for mobile */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 bg-white rounded-full p-2 shadow-lg border border-gray-200"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open sidebar"
+      >
+        <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <div className="h-full overflow-hidden grid grid-cols-10 bg-[#fcfcfd] divide-x-2 divide-[#D0D5DD] text-gray-900">
         {/* Sidebar */}
         <Sidebar
@@ -105,6 +191,8 @@ export default function ConversationContainer({
               selectedContacts: contacts,
             })
           }
+          isDrawerOpen={sidebarOpen}
+          onCloseDrawer={() => setSidebarOpen(false)}
         />
         {/* Empty Conversation (no contacts selected) */}
         <div className="col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
@@ -129,21 +217,28 @@ export default function ConversationContainer({
                 }
                 conversation={conversation}
                 onRespondToMessage={handleRespondToMessage}
+                onReplyToMessage={handleReplyToMessage}
+                replyToMessage={replyToMessage}
+                onSendReply={handleSendReply}
+                onCancelReply={handleCancelReply}
+                dynamicReplies={dynamicReplies}
               />
             )}
 
-          {/* Composer */}
-          <div className="p-4">
-            <ComposerContainer
-              key={conversation?.selectedContacts[0]?.email ?? "new"}
-              contacts={contactsResponse || initialContacts}
-              selectedContacts={conversation?.selectedContacts || []}
-              disabledForm={!conversation?.selectedContacts.length}
-              disabledSend={!conversation?.selectedContacts[0]}
-              onSuccess={handleComposerSuccess}
-              defaultComposedMessage={messageToRespondTo}
-            />
-          </div>
+          {/* Composer - only show if not replying */}
+          {!replyToMessage && (
+            <div className="p-4">
+              <ComposerContainer
+                key={conversation?.selectedContacts[0]?.email ?? "new"}
+                contacts={contactsResponse || initialContacts}
+                selectedContacts={conversation?.selectedContacts || []}
+                disabledForm={!conversation?.selectedContacts.length}
+                disabledSend={!conversation?.selectedContacts[0]}
+                onSuccess={handleComposerSuccess}
+                defaultComposedMessage={messageToRespondTo}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

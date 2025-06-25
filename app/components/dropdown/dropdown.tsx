@@ -1,11 +1,30 @@
 import { ReactNode } from "react";
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 
 export type DropdownProps = {
   button: ReactNode;
   items: ReactNode[];
-  anchor?: "top" | "left" | "bottom" | "right" | "top start" | "top end" | "bottom start" | "bottom end" | "left start" | "left end" | "right start" | "right end";
+  anchor?:
+    | "top"
+    | "left"
+    | "bottom"
+    | "right"
+    | "top start"
+    | "top end"
+    | "bottom start"
+    | "bottom end"
+    | "left start"
+    | "left end"
+    | "right start"
+    | "right end";
   menuItemsClassName?: string;
+  disabled?: boolean;
 };
 
 function Dropdown({
@@ -13,10 +32,17 @@ function Dropdown({
   items,
   anchor = "bottom end",
   menuItemsClassName = "",
+  disabled = false,
 }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <MenuButton as="div" className="cursor-pointer">
+      <MenuButton
+        as="div"
+        className={`cursor-pointer${
+          disabled ? " opacity-50 pointer-events-none" : ""
+        }`}
+        disabled={disabled}
+      >
         {button}
       </MenuButton>
       <Transition
@@ -29,7 +55,7 @@ function Dropdown({
       >
         <MenuItems
           anchor={anchor}
-          className={`z-10 bg-white rounded-xl shadow-lg py-2 mt-2 focus:outline-none min-w-[10rem] ${menuItemsClassName}`}
+          className={`z-50 bg-white rounded-xl shadow-lg py-2 mt-3 focus:outline-none min-w-[10rem] ${menuItemsClassName}`}
         >
           {items.map((item, idx) => (
             <MenuItem key={idx} as="div" className="w-full px-2">

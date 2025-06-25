@@ -5,6 +5,7 @@ import {
   XMarkIcon,
   ArrowsPointingOutIcon,
   TrashIcon,
+  ArrowUturnLeftIcon,
 } from "@heroicons/react/24/outline";
 import { ComposedMessage } from "./composer.types";
 import {
@@ -15,6 +16,7 @@ import { combineRealAndEphemeralContacts } from "./composer.utils";
 import ContactsComboboxContainer from "./contacts-combobox-container";
 import { splitCommaSeparatedString } from "@/app/utils/split-comma-separated-strings";
 import { Button } from "../buttons/button";
+import { NylasMessageWithContact } from "@/app/types/messages.types";
 
 type ComposerProps = {
   contacts: ForumContactsResponse;
@@ -25,6 +27,7 @@ type ComposerProps = {
   onTrashMessage: () => void;
   disabledForm?: boolean;
   disabledSend?: boolean;
+  replyToMessage?: NylasMessageWithContact; // The message being replied to
 };
 
 export default function FullComposer({
@@ -36,6 +39,7 @@ export default function FullComposer({
   onTrashMessage,
   disabledForm,
   disabledSend,
+  replyToMessage,
 }: ComposerProps) {
   const [isMaximized, setIsMaximized] = useState(false);
   const [showCc, setShowCc] = useState(Boolean(composedMessage.recipients.cc));
@@ -62,6 +66,10 @@ export default function FullComposer({
     });
   };
 
+  const composerTitle = replyToMessage 
+    ? (composedMessage.isReply ? "Reply to Message" : "Respond to Message")
+    : "New Message";
+
   return (
     <div>
       <div
@@ -71,7 +79,7 @@ export default function FullComposer({
       >
         {/* Composer Header */}
         <div className="flex justify-between items-center px-4 py-4 bg-[#f3f4f7] rounded-t-xl">
-          <h3 className="text-md font-medium">New Message</h3>
+          <h3 className="text-md font-medium">{composerTitle}</h3>
           <div className="flex gap-2">
             <button
               disabled={disabledForm}
@@ -89,6 +97,23 @@ export default function FullComposer({
             </button>
           </div>
         </div>
+
+        {/* Reply indicator */}
+        {replyToMessage && composedMessage.isReply && (
+          <div className="px-4 py-3 bg-[#F9FAFB] border-b border-[#E4E7EC]">
+            <div className="flex items-center gap-2 text-sm text-[#667085]">
+              <ArrowUturnLeftIcon className="w-4 h-4 flex-shrink-0" />
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[#344054] font-medium flex-shrink-0">
+                  Replying to {replyToMessage.derivedContact.nylasContact?.given_name || replyToMessage.derivedContact.derivedName}:
+                </span>
+                <span className="text-[#667085] truncate">
+                  {replyToMessage.snippet || replyToMessage.body.replace(/<[^>]*>/g, '').substring(0, 80)}...
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Composer Body */}
         <div
@@ -212,7 +237,7 @@ export default function FullComposer({
                 statusbar: false,
                 toolbar_location: "top",
                 /*setup: (editor) => {
-                  editor.ui.registry.addIcon('sendMessage', '<svg class="w-5 h-5 -rotate-45 -translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0721.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>');
+                  editor.ui.registry.addIcon('sendMessage', '<svg class="w-5 h-5 -rotate-45 -translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0721.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>');
                   editor.ui.registry.addButton('sendMessage', {
                     text: 'Send',
                     icon: 'sendMessage',

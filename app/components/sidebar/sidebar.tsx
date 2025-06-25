@@ -8,6 +8,7 @@ import ForumLogo from "../logo/forum-logo";
 import { User } from "@clerk/nextjs/server";
 import SidebarUserProfile from "./sidebar-user-profile";
 import SidebarContactsBoxContainer from "./sidebar-contacts-box-container";
+import { useEffect } from "react";
 
 const hardCodedGroupContacts: ForumContact[] = [
   {
@@ -185,6 +186,8 @@ type SidebarProps = {
   selectedContacts: ForumContact[];
   onSetConversation: (contacts: ForumContact[]) => void;
   user: User;
+  isDrawerOpen?: boolean;
+  onCloseDrawer?: () => void;
 };
 
 export default function Sidebar({
@@ -192,7 +195,21 @@ export default function Sidebar({
   selectedContacts,
   onSetConversation,
   user,
+  isDrawerOpen = false,
+  onCloseDrawer,
 }: SidebarProps) {
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    if (isDrawerOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isDrawerOpen]);
+
   const contactBoxes: SidebarContactBox[] = [
     {
       title: "Forum Group",
@@ -218,12 +235,61 @@ export default function Sidebar({
     },
   ];
 
-  return (
-    <div className="col-span-2 py-4 px-2 flex flex-col gap-4 justify-between overflow-y-auto">
-      <div className="flex flex-col gap-2">
-        <Link href="/">
-          <ForumLogo />
-        </Link>
+  // Sidebar content
+  const sidebarContent = (
+    <div className="h-full col-span-2 px-2 flex flex-col bg-white shadow-lg">
+      <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
+        {/* header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <Link href="/">
+              <ForumLogo />
+            </Link>
+          </div>
+
+          {/* menu */}
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6 text-gray-900"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+              <circle cx="5" cy="12" r="1" />
+            </svg>
+          </div>
+        </div>
+
+        {/* search-forum */}
+        <div className="w-full flex justify-end items-center relative">
+          <input
+            placeholder="Search Forum"
+            className="border border-gray-300 rounded-full p-2 w-full"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="absolute mr-2 w-10"
+          >
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+          </svg>
+        </div>
         {!contacts.contacts.length && <div>No contacts found</div>}
 
         {contactBoxes.map((box) => (
@@ -235,7 +301,59 @@ export default function Sidebar({
           />
         ))}
       </div>
+
+      {/* user-profile */}
       <SidebarUserProfile user={user} />
     </div>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden md:block h-full col-span-2">{sidebarContent}</div>
+      {/* Mobile drawer */}
+      {
+        <>
+          {/* Backdrop */}
+          <div
+            className={`fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:hidden ${
+              isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            onClick={onCloseDrawer}
+            aria-label="Close sidebar backdrop"
+          />
+          {/* Drawer */}
+          <div
+            className={`fixed top-0 left-0 z-50 h-full w-full max-w-xs bg-white shadow-2xl transition-transform duration-300 md:hidden flex flex-col
+            ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"}`}
+          >
+            {/* Close button */}
+            <button
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+              onClick={onCloseDrawer}
+              aria-label="Close sidebar"
+            >
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="pt-12 h-full flex flex-col overflow-hidden">
+              {sidebarContent}
+            </div>
+          </div>
+        </>
+      }
+    </>
   );
 }
