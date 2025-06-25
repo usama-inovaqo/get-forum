@@ -4,7 +4,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { Button } from "../buttons/button";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type DialogComponentProps = {

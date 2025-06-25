@@ -47,6 +47,7 @@ export const combineRealAndEphemeralContacts = (
   const newEmails = emailList.filter(
     (email) =>
       !contacts.contacts.some((contact: ForumContact) =>
+        contact.nylasContact &&
         contact.nylasContact.emails.some(
           (e: { email: string }) =>
             e.email.toLowerCase() === email.toLowerCase()
@@ -55,7 +56,9 @@ export const combineRealAndEphemeralContacts = (
   );
 
   return [
-    ...contacts.contacts.map((contact) => contact.nylasContact),
+    ...contacts.contacts
+      .map((contact) => contact.nylasContact)
+      .filter((nylasContact): nylasContact is NylasContact => nylasContact !== undefined),
     ...newEmails.map(createEphemeralContactFromEmailString),
   ];
 };

@@ -1,5 +1,5 @@
 "use client";
-import { formatUnixTimestamp, isMessageFromToday } from "@/app/utils/format-unix-timestamp";
+import { formatUnixTimestamp } from "@/app/utils/format-unix-timestamp";
 import {
   NylasMessage,
   NylasMessageWithContact,

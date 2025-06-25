@@ -29,12 +29,12 @@ export default function SingleThread({
         src={
           thread.participants[0].email === user?.emailAddresses[0].emailAddress
             ? user?.imageUrl
-            : selectedContact.nylasContact.picture_url
+            : selectedContact.nylasContact?.picture_url || "/forum-logo.png"
         }
         alt={
           thread.participants[0].email === user?.emailAddresses[0].emailAddress
             ? "Your profile picture"
-            : `${selectedContact.nylasContact.given_name}'s profile picture`
+            : `${selectedContact.nylasContact?.given_name || selectedContact.derivedName}'s profile picture`
         }
         width={50}
         height={50}
