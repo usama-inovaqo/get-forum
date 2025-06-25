@@ -22,7 +22,7 @@ export default function SidebarContact({
 
   return (
     <button
-      className={`w-full flex items-center justify-between rounded-xl py-4 hover:bg-gray-50 ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
+      className={`w-full flex items-center justify-between rounded-xl py-4 hover:bg-gray-100 ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
         ? "bg-[#F9FAFB]"
         : ""
         }`}
@@ -61,7 +61,7 @@ export default function SidebarContact({
 
       {/* time */}
       <div className="text-[#667085] text-xs">
-        {timeReceived}
+        {timeReceived}pm
       </div>
     </button>
   );

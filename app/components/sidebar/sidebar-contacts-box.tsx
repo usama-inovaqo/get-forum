@@ -79,7 +79,7 @@ export default function SidebarContactsBox({
               className={`
                 w-5 h-5 text-gray-500
                 transition-transform duration-300 delay-100
-                ${contactBoxOpen ? "rotate-180" : "rotate-0"}
+                ${contactBoxOpen ? "rotate-0" : "-rotate-90"}
               `}
             />
 
@@ -88,6 +88,7 @@ export default function SidebarContactsBox({
                 <div className="text-xl font-semibold text-gray-600">
                   {box.title}
                 </div>
+                <div className="text-gray-600">{box.domain && box.domain}</div>
                 <div
                   className={`text-md text-[#98A2B3] ${
                     box.title.toLowerCase().includes("team") ? "font-bold" : ""
@@ -98,7 +99,6 @@ export default function SidebarContactsBox({
                   }${box.title.toLowerCase().includes("team") ? ")" : ""}`}
                 </div>
               </div>
-              <div className="text-gray-600">{box.domain && box.domain}</div>
             </div>
           </button>
         </div>
@@ -115,9 +115,9 @@ export default function SidebarContactsBox({
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className={`w-5 h-5 ${
                   search ? "text-[#475467]" : "text-gray-600"
                 }`}
@@ -215,7 +215,8 @@ export default function SidebarContactsBox({
                 onClick={() => setShowAllContacts(true)}
                 className="py-2 px-4 rounded-xl hover:bg-[#F9FAFB]"
               >
-                Show more ({filteredContacts.length - 3} more)
+                Show more 
+                {/* ({filteredContacts.length - 3} more) */}
               </button>
             ))}
         </div>

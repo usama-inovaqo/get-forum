@@ -40,9 +40,9 @@ export default function SidebarUserProfile({ user }: SidebarUserProfileProps) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="w-6 h-6 text-gray-900 rotate-45"
             >
               <path d="M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" />
@@ -59,9 +59,9 @@ export default function SidebarUserProfile({ user }: SidebarUserProfileProps) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="w-6 h-6 text-gray-900"
             >
               <path d="M10.268 21a2 2 0 0 0 3.464 0" />
@@ -77,9 +77,9 @@ export default function SidebarUserProfile({ user }: SidebarUserProfileProps) {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="w-6 h-6 text-gray-900"
               >
                 <circle cx="12" cy="12" r="1" />
