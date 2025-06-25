@@ -69,7 +69,7 @@ export default function SingleMessage({
       <div className="flex gap-4 items-start p-4 hover:bg-[#f3f4f7] rounded-xl w-full group">
         <SingleMessageProfilePicture user={user} message={message} />
         <div className="flex flex-col gap-2 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-7">
             {message.isFromUser
               ? user.firstName
               : message.derivedContact.nylasContact?.given_name ||
