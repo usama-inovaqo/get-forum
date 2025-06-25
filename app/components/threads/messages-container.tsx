@@ -29,6 +29,8 @@ export default function MessagesContainer({
 }: MessagesContainerProps) {
   const { user } = useUser();
   const [replyText, setReplyText] = useState("");
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
   const {
     messages: fetchedMessages,
@@ -36,23 +38,32 @@ export default function MessagesContainer({
     error: messagesError,
   } = useMessages(messageIds, 30000);
 
-  // Combine fetched messages with dynamic replies
+  // Combine fetched messages with dynamic replies, sorted oldest to newest
   const allMessages = useMemo(() => {
     if (!fetchedMessages) return [];
-    
-    // Merge and sort by date
-    const combined = [...fetchedMessages, ...dynamicReplies];
-    return combined.sort((a, b) => a.date - b.date);
+    const sortedFetchedMessages = [...fetchedMessages].sort((a, b) => a.date - b.date);
+    return [...sortedFetchedMessages, ...dynamicReplies];
   }, [fetchedMessages, dynamicReplies]);
 
   const serializedUser = user ? JSON.parse(JSON.stringify(user)) : null;
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (lastMessageRef.current && allMessages?.length > 0) {
+    const checkOverflow = () => {
+      if (messagesContainerRef.current) {
+        setIsOverflowing(messagesContainerRef.current.scrollHeight > messagesContainerRef.current.clientHeight);
+      }
+    };
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow); // Check on resize
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [allMessages]);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "end",
       });
     }
   }, [allMessages]);
@@ -82,9 +93,36 @@ export default function MessagesContainer({
     }
   };
 
+  // Calculate separator states once for all messages for a top-down view
+  const separatorStates = useMemo(() => {
+    if (!allMessages || allMessages.length === 0) return [];
+    
+    const firstTodayIndex = allMessages.findIndex(m => isMessageFromToday(m.date));
+    const firstUnreadIndex = allMessages.findIndex(m => m.unread);
+
+    return allMessages.map((message, index) => {
+      const isFirstMessage = index === 0;
+      const isFirstOfToday = index === firstTodayIndex && firstTodayIndex !== -1;
+      const isFirstUnread = index === firstUnreadIndex && firstUnreadIndex !== -1;
+
+      const showChatBeginning = isFirstMessage;
+      const showTodaySeparator = isFirstOfToday && !showChatBeginning;
+      const showNewSeparator = isFirstUnread && !showChatBeginning && !showTodaySeparator;
+
+      return {
+        showChatBeginning,
+        showTodaySeparator,
+        showNewSeparator,
+      };
+    });
+  }, [allMessages]);
+
   return (
     <div className="w-full h-full flex flex-col gap-2">
-      <div className="flex-1 flex flex-col-reverse gap-2 overflow-y-auto">
+      <div 
+        ref={messagesContainerRef}
+        className={`flex-1 flex flex-col gap-2 overflow-y-auto ${!isOverflowing ? 'justify-end' : 'justify-start'}`}
+      >
         {isMessagesLoading && (
           <div className="flex flex-col gap-2">
             <div className="px-4">Loading messages...</div>
@@ -96,30 +134,21 @@ export default function MessagesContainer({
           user &&
           allMessages.length > 0 &&
           allMessages.map((message, index) => {
-            // Check if this is the first message (chat beginning)
-            const isFirstMessage = index === allMessages.length - 1;
-            
-            // Check if "Today" separator has already been shown for a previous message
-            const todayAlreadyShown = allMessages.slice(index + 1).some(msg => 
-              isMessageFromToday(msg.date)
-            );
-            
-            // Check if this is the first message of today
-            const isFirstMessageOfToday = isMessageFromToday(message.date) && !todayAlreadyShown;
-            
-            // Find the message this is replying to
             const replyToMsg = findReplyToMessage(message);
+            const separators = separatorStates[index];
             
             return (
-              <div ref={index === 0 ? lastMessageRef : undefined} key={message.id}>
+              <div ref={index === allMessages.length - 1 ? lastMessageRef : undefined} key={message.id}>
                 <SingleMessage
                   user={serializedUser}
                   message={message}
                   onRespondToMessage={onRespondToMessage}
                   onReplyToMessage={onReplyToMessage}
-                  isFirstMessage={isFirstMessage}
-                  isFirstMessageOfToday={isFirstMessageOfToday}
+                  isFirstMessage={separators.showChatBeginning}
+                  isFirstMessageOfToday={separators.showTodaySeparator}
+                  showNewSeparator={separators.showNewSeparator}
                   replyToMessage={replyToMsg}
+                  applyTopMargin={isOverflowing && separators.showChatBeginning}
                 />
               </div>
             );

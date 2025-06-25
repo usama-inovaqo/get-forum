@@ -17,7 +17,9 @@ type SingleMessageProps = {
   onReplyToMessage: (message: NylasMessage) => void;
   isFirstMessage?: boolean;
   isFirstMessageOfToday?: boolean;
+  showNewSeparator?: boolean;
   replyToMessage?: NylasMessageWithContact; // The original message this is replying to
+  applyTopMargin?: boolean;
 };
 
 export default function SingleMessage({
@@ -27,17 +29,14 @@ export default function SingleMessage({
   onReplyToMessage,
   isFirstMessage = false,
   isFirstMessageOfToday = false,
+  showNewSeparator = false,
   replyToMessage,
+  applyTopMargin = false,
 }: SingleMessageProps) {
-  // Priority-based separator logic: Chat Beginning > Today > New
-  const showChatBeginning = isFirstMessage;
-  const showTodaySeparator = isMessageFromToday(message.date) && !showChatBeginning;
-  const showNewSeparator = message.unread && !showChatBeginning && !showTodaySeparator;
-
   return (
     <div>
-      {showChatBeginning && (
-        <div className="flex items-center h-6 text-[#667085] text-sm mb-4 mx-4">
+      {isFirstMessage && (
+        <div className={`flex items-center h-6 text-[#667085] text-sm mb-4 mx-4 ${applyTopMargin ? 'mt-12' : ''}`}>
           <span className="w-full border-t border-[#E4E7EC]"></span>
           <div className="ml-2 px-2 bg-white whitespace-nowrap text-xs font-medium">
             Chat Beginning
@@ -45,7 +44,7 @@ export default function SingleMessage({
           <span className="w-full border-t border-[#E4E7EC]"></span>
         </div>
       )}
-      {showTodaySeparator && (
+      {isFirstMessageOfToday && (
         <div className="flex items-center h-6 text-[#667085] text-sm mb-4 mx-4">
           <span className="w-full border-t border-[#E4E7EC]"></span>
           <div className="flex items-center justify-center w-5 h-5 bg-[#EAECF0] rounded-full -ml-2.5 flex-shrink-0">
@@ -58,8 +57,11 @@ export default function SingleMessage({
         </div>
       )}
       {showNewSeparator && (
-        <div className="flex items-center gap-4 h-2 text-[#B80045] text-sm">
-          <span className="w-full border-t border-[#B80045]"></span>New{" "}
+        <div className="flex items-center gap-4 h-2 text-[#B80045] text-sm mb-4 mx-4">
+          <span className="w-full border-t border-[#B80045]"></span>
+          <div className="ml-2 px-2 bg-white whitespace-nowrap text-xs font-medium text-[#B80045]">
+            New
+          </div>
           <span className="w-full border-t border-[#B80045]"></span>
         </div>
       )}
