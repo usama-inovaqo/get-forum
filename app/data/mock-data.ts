@@ -1,6 +1,10 @@
-import { ForumContactsResponse, NylasContact, ForumContact } from "../types/contacts.types";
-import { NylasMessage, NylasMessageWithContact } from "../types/messages.types";
-import { NylasThread, ForumThreadWithContact } from "../types/threads.types";
+import {
+  ForumContactsResponse,
+  NylasContact,
+  ForumContact,
+} from "../types/contacts.types";
+import { NylasMessageWithContact } from "../types/messages.types";
+import { ForumThreadWithContact } from "../types/threads.types";
 import { FetchDataResponse } from "../types/api.types";
 
 // Mock Nylas Contacts
@@ -15,7 +19,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+1234567890"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
     surname: "Doe",
     source: "nylas",
     web_pages: [],
@@ -32,7 +37,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+0987654321"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
     surname: "Smith",
     source: "nylas",
     web_pages: [],
@@ -49,7 +55,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+0987654321"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
     surname: "Smith",
     source: "nylas",
     web_pages: [],
@@ -66,7 +73,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+0987654321"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
     surname: "Smith",
     source: "nylas",
     web_pages: [],
@@ -83,7 +91,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+1122334455"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     surname: "Wilson",
     source: "nylas",
     web_pages: [],
@@ -100,7 +109,8 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+5566778899"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    picture_url:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     surname: "Johnson",
     source: "nylas",
     web_pages: [],
@@ -121,7 +131,8 @@ export const mockMessages: NylasMessageWithContact[] = [
     grant_id: "grant_123",
     id: "msg_1",
     object: "message",
-    snippet: "Hi there! I wanted to give you a quick update on the project we discussed last week...",
+    snippet:
+      "Hi there! I wanted to give you a quick update on the project we discussed last week...",
     bcc: [],
     cc: [],
     attachments: [],
@@ -196,7 +207,8 @@ export const mockMessages: NylasMessageWithContact[] = [
     grant_id: "grant_123",
     id: "msg_4",
     object: "message",
-    snippet: "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
+    snippet:
+      "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
     bcc: [],
     cc: [],
     attachments: [],
@@ -221,7 +233,8 @@ export const mockMessages: NylasMessageWithContact[] = [
     grant_id: "grant_123",
     id: "msg_5",
     object: "message",
-    snippet: "Hi! I've just uploaded the new design assets to our shared drive...",
+    snippet:
+      "Hi! I've just uploaded the new design assets to our shared drive...",
     bcc: [],
     cc: [],
     attachments: [],
@@ -343,7 +356,8 @@ export const mockThreads: ForumThreadWithContact[] = [
       grant_id: "grant_123",
       id: "msg_4",
       object: "message",
-      snippet: "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
+      snippet:
+        "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
       bcc: [],
       cc: [],
       attachments: [],
@@ -357,7 +371,8 @@ export const mockThreads: ForumThreadWithContact[] = [
     grant_id: "grant_123",
     id: "thread_3",
     object: "thread",
-    snippet: "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
+    snippet:
+      "Hello, I hope this email finds you well. I'm reaching out to discuss a potential partnership...",
     subject: "Partnership Opportunity",
     participants: [
       { email: "mike.wilson@acme.com", name: "Mike Wilson" },
@@ -387,7 +402,8 @@ export const mockThreads: ForumThreadWithContact[] = [
       grant_id: "grant_123",
       id: "msg_5",
       object: "message",
-      snippet: "Hi! I've just uploaded the new design assets to our shared drive...",
+      snippet:
+        "Hi! I've just uploaded the new design assets to our shared drive...",
       bcc: [],
       cc: [],
       attachments: [],
@@ -401,7 +417,8 @@ export const mockThreads: ForumThreadWithContact[] = [
     grant_id: "grant_123",
     id: "thread_4",
     object: "thread",
-    snippet: "Hi! I've just uploaded the new design assets to our shared drive...",
+    snippet:
+      "Hi! I've just uploaded the new design assets to our shared drive...",
     subject: "New design assets",
     participants: [
       { email: "sarah.johnson@acme.com", name: "Sarah Johnson" },
@@ -420,29 +437,40 @@ export const mockThreads: ForumThreadWithContact[] = [
 ];
 
 // Mock Forum Contacts
-export const mockForumContacts: ForumContact[] = mockNylasContacts.map((contact, index) => ({
-  email: contact.emails[0].email,
-  derivedName: `${contact.given_name} ${contact.surname}`,
-  latestMessage: mockThreads[index]?.latest_draft_or_message,
-  nylasContact: contact,
-}));
+export const mockForumContacts: ForumContact[] = mockNylasContacts.map(
+  (contact, index) => ({
+    email: contact.emails[0].email,
+    derivedName: `${contact.given_name} ${contact.surname}`,
+    latestMessage: mockThreads[index]?.latest_draft_or_message,
+    nylasContact: contact,
+  })
+);
 
 // Mock Contacts Response
 export const mockContactsResponse: ForumContactsResponse = {
-  contacts: mockForumContacts.filter(contact => !contact.email.includes('@acme.com')),
-  teamContacts: mockForumContacts.filter(contact => contact.email.includes('@acme.com')),
+  contacts: mockForumContacts.filter(
+    (contact) => !contact.email.includes("@acme.com")
+  ),
+  teamContacts: mockForumContacts.filter((contact) =>
+    contact.email.includes("@acme.com")
+  ),
   nonContacts: [], // Usually derived from threads where participants aren't in contacts
 };
 
 // API Response wrappers
-export const mockContactsApiResponse: FetchDataResponse<ForumContactsResponse> = {
-  data: [mockContactsResponse],
-};
+export const mockContactsApiResponse: FetchDataResponse<ForumContactsResponse> =
+  {
+    data: [mockContactsResponse],
+  };
 
-export const mockMessagesApiResponse: FetchDataResponse<NylasMessageWithContact[]> = {
+export const mockMessagesApiResponse: FetchDataResponse<
+  NylasMessageWithContact[]
+> = {
   data: [mockMessages],
 };
 
-export const mockThreadsApiResponse: FetchDataResponse<ForumThreadWithContact[]> = {
+export const mockThreadsApiResponse: FetchDataResponse<
+  ForumThreadWithContact[]
+> = {
   data: [mockThreads],
-}; 
+};

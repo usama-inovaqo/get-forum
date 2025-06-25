@@ -2,7 +2,7 @@
 import { ForumContact, SidebarContactBox } from "@/app/types/contacts.types";
 import { useState, useMemo, useCallback } from "react";
 import SidebarContactsBox from "./sidebar-contacts-box";
-import SidebarContactGroupGroupBox from "./groups/sidebar-contact-group-group-box";
+// import SidebarContactGroupGroupBox from "./groups/sidebar-contact-group-group-box";
 
 type SidebarContactsBoxContainerProps = {
   box: SidebarContactBox;
