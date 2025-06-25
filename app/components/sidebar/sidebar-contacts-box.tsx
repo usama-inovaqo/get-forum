@@ -3,10 +3,7 @@ import { Input } from "@headlessui/react";
 import { ForumContact, SidebarContactBox } from "@/app/types/contacts.types";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Dropdown from "@components/dropdown/dropdown";
-import {
-  AdjustmentsHorizontalIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import DropdownMenuItem from "../dropdown/dropdown-menu-item";
 import SidebarContact from "./sidebar-contact";
 
@@ -65,7 +62,7 @@ export default function SidebarContactsBox({
 
   return (
     <div className="flex flex-col rounded-xl gap-4 p-2 text-black bg-[#F9FAFB]">
-      <div className="flex sm:flex-col sm:items-start md:flex-row md:items-center justify-between">
+      <div className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-2 shrink-0">
           <button
             title={contactBoxOpen ? "Collapse contacts" : "Expand contacts"}
@@ -86,11 +83,23 @@ export default function SidebarContactsBox({
               `}
             />
 
-            <div className="text-xl font-semibold text-gray-600">
-              {box.title}
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-1">
+                <div className="text-xl font-semibold text-gray-600">
+                  {box.title}
+                </div>
+                <div
+                  className={`text-md text-[#98A2B3] ${
+                    box.title.toLowerCase().includes("team") ? "font-bold" : ""
+                  }`}
+                >
+                  {`${box.title.toLowerCase().includes("team") ? "(" : ""}${
+                    contacts.length
+                  }${box.title.toLowerCase().includes("team") ? ")" : ""}`}
+                </div>
+              </div>
+              <div className="text-gray-600">{box.domain && box.domain}</div>
             </div>
-            <div className="text-gray-600">{box.domain && box.domain}</div>
-            <div className="text-md text-[#98A2B3]">{contacts.length}</div>
           </button>
         </div>
 

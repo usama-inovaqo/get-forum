@@ -29,7 +29,7 @@ export default function ConversationContainer({
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [useableContacts, setUseableContacts] =
     useState<ForumContactsResponse>(initialContacts);
-
+  const [sidebarOpen, setSidebarOpen] = useState(false); // for mobile drawer
   const [messageToRespondTo, setMessageToRespondTo] = useState<
     ComposedMessage | undefined
   >(undefined); // TODO we may not need this piece of state
@@ -168,6 +168,16 @@ export default function ConversationContainer({
 
   return (
     <div className="h-full">
+      {/* Hamburger for mobile */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 bg-white rounded-full p-2 shadow-lg border border-gray-200"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open sidebar"
+      >
+        <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <div className="h-full overflow-hidden grid grid-cols-10 bg-[#fcfcfd] divide-x-2 divide-[#D0D5DD] text-gray-900">
         {/* Sidebar */}
         <Sidebar
@@ -181,6 +191,8 @@ export default function ConversationContainer({
               selectedContacts: contacts,
             })
           }
+          isDrawerOpen={sidebarOpen}
+          onCloseDrawer={() => setSidebarOpen(false)}
         />
         {/* Empty Conversation (no contacts selected) */}
         <div className="col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
