@@ -195,7 +195,7 @@ export default function ConversationContainer({
           onCloseDrawer={() => setSidebarOpen(false)}
         />
         {/* Empty Conversation (no contacts selected) */}
-        <div className="col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
+        <div className="col-span-10 md:col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
           {!conversation?.selectedContacts.length && (
             <div className="bg-[#F2F4F7] flex justify-center items-center h-full rounded-xl m-4">
               <div className="flex flex-col items-center justify-center gap-2">
