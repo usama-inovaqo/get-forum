@@ -272,7 +272,7 @@ export default function Sidebar({
         <div className="w-full flex justify-end items-center relative">
           <input
             placeholder="Search Forum"
-            className="border border-gray-300 rounded-full p-2 w-full placeholder:pl-2"
+            className="border border-gray-300 rounded-full p-2 w-full placeholder:pl-2 focus:outline-none"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"

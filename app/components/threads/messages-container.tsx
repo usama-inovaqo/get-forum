@@ -204,22 +204,23 @@ export default function MessagesContainer({
               <XMarkIcon className="w-4 h-4" />
             </button>
           </div>
-          <div className="flex gap-2">
-            <textarea
+
+          {/* reply in thread */}
+          <div className="relative w-full">
+            <input
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your reply..."
-              className="flex-1 p-3 border border-[#E4E7EC] rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-[#101828] focus:border-[#101828]"
-              rows={3}
+              className="border rounded-full w-full p-4 pr-12 focus:outline-none"
             />
             <button
+              type="button"
               onClick={handleSendReply}
               disabled={!replyText.trim()}
-              className="px-4 py-2 bg-[#101828] text-white rounded-lg hover:bg-[#1f2937] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent p-0 m-0"
             >
-              <PaperAirplaneIcon className="w-4 h-4" />
-              Send
+              <PaperAirplaneIcon className="w-5 h-5 -rotate-45 -translate-y-0.5" />
             </button>
           </div>
         </div>
