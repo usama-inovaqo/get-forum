@@ -60,7 +60,7 @@ export default function SidebarContact({
       </div>
 
       {/* time */}
-      <div className="text-[#667085] hidden text-xs sm:text-sm sm:flex sm:flex-col">
+      <div className="text-[#667085] text-xs">
         {timeReceived}
       </div>
     </button>
