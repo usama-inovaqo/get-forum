@@ -227,7 +227,7 @@ export default function ConversationContainer({
 
           {/* Composer - only show if not replying */}
           {!replyToMessage && (
-            <div className="p-4">
+            <div className="mx-8 p-4">
               <ComposerContainer
                 key={conversation?.selectedContacts[0]?.email ?? "new"}
                 contacts={contactsResponse || initialContacts}

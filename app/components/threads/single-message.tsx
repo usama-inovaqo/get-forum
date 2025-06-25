@@ -8,7 +8,11 @@ import { trimEmailHtml } from "@/app/utils/trim-email-html";
 import { getEmailDomain } from "@/app/utils/get-email-domain";
 import SingleMessageProfilePicture from "./single-message-profile-picture";
 import { User } from "@clerk/nextjs/server";
-import { PencilSquareIcon, ChevronDownIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  ChevronDownIcon,
+  ArrowUturnLeftIcon,
+} from "@heroicons/react/24/outline";
 
 type SingleMessageProps = {
   user: User;
@@ -36,7 +40,11 @@ export default function SingleMessage({
   return (
     <div>
       {isFirstMessage && (
-        <div className={`flex items-center h-6 text-[#667085] text-sm mb-4 mx-4 ${applyTopMargin ? 'mt-12' : ''}`}>
+        <div
+          className={`flex items-center h-6 text-[#667085] text-sm mb-4 mx-4 ${
+            applyTopMargin ? "mt-12" : ""
+          }`}
+        >
           <span className="w-full border-t border-[#E4E7EC]"></span>
           <div className="ml-2 px-2 bg-white whitespace-nowrap text-xs font-medium">
             Chat Beginning
@@ -69,23 +77,27 @@ export default function SingleMessage({
       <div className="flex gap-4 items-start p-4 hover:bg-[#f3f4f7] rounded-xl w-full group">
         <SingleMessageProfilePicture user={user} message={message} />
         <div className="flex flex-col gap-2 flex-1">
-          <div className="flex items-center gap-2">
-            {message.isFromUser
-              ? user.firstName
-              : message.derivedContact.nylasContact?.given_name ||
-                message.derivedContact.derivedName}
-            <div className="text-[#98A2B3] flex items-center gap-2">
-              <span className="text-sm">
+          <div className="flex items-center gap-7">
+            <div className="flex items-center gap-2">
+              {message.isFromUser
+                ? user.firstName
+                : message.derivedContact.nylasContact?.given_name ||
+                  message.derivedContact.derivedName}
+              <span className="text-sm text-[#98A2B3]">
                 {message.isFromUser
                   ? `@${getEmailDomain(user.emailAddresses[0].emailAddress)}`
                   : `@${getEmailDomain(message.derivedContact.email)}`}
               </span>
-              <span className="text-[#667085] text-sm">
-                {formatUnixTimestamp(message.date, "time")}
-              </span>
             </div>
-            {}
-            <div className="text-[#667085] text-xs">{ !message.isFromUser && "Subject : "}{!message.isFromUser && message.subject}</div>
+
+            <div className="text-[#667085] text-sm">
+              {formatUnixTimestamp(message.date, "time")}
+            </div>
+
+            <div className="text-[#667085] text-xs">
+              {!message.isFromUser && "Subject : "}
+              {!message.isFromUser && message.subject}
+            </div>
             <div
               className={`invisible ${
                 !message.isFromUser && "group-hover:visible"
@@ -114,14 +126,20 @@ export default function SingleMessage({
           {replyToMessage && (
             <div className="bg-[#F8F9FA] border-l-4 border-[#E4E7EC] rounded-r-lg p-3 mb-2">
               <div className="text-xs text-[#667085] mb-2">
-                Subject: {replyToMessage.subject} • {new Date(replyToMessage.date * 1000).toLocaleDateString('en-US', { 
-                  month: 'long', 
-                  day: 'numeric', 
-                  year: 'numeric' 
-                })} • {formatUnixTimestamp(replyToMessage.date, "time")}
+                Subject: {replyToMessage.subject} •{" "}
+                {new Date(replyToMessage.date * 1000).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  }
+                )}{" "}
+                • {formatUnixTimestamp(replyToMessage.date, "time")}
               </div>
               <div className="text-sm text-[#475467]">
-                {replyToMessage.snippet || replyToMessage.body.replace(/<[^>]*>/g, '').substring(0, 200)}
+                {replyToMessage.snippet ||
+                  replyToMessage.body.replace(/<[^>]*>/g, "").substring(0, 200)}
               </div>
             </div>
           )}

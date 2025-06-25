@@ -4,7 +4,10 @@ import { useMessages } from "@/app/hooks/useMessages";
 import { SkeletonLoader } from "../skeleton-loader/skeleton-loader";
 import { useRef, useEffect, useState, useMemo } from "react";
 import { useUser } from "@clerk/nextjs";
-import { NylasMessage, NylasMessageWithContact } from "@/app/types/messages.types";
+import {
+  NylasMessage,
+  NylasMessageWithContact,
+} from "@/app/types/messages.types";
 import { isMessageFromToday } from "@/app/utils/format-unix-timestamp";
 import { PaperAirplaneIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -41,7 +44,9 @@ export default function MessagesContainer({
   // Combine fetched messages with dynamic replies, sorted oldest to newest
   const allMessages = useMemo(() => {
     if (!fetchedMessages) return [];
-    const sortedFetchedMessages = [...fetchedMessages].sort((a, b) => a.date - b.date);
+    const sortedFetchedMessages = [...fetchedMessages].sort(
+      (a, b) => a.date - b.date
+    );
     return [...sortedFetchedMessages, ...dynamicReplies];
   }, [fetchedMessages, dynamicReplies]);
 
@@ -51,20 +56,25 @@ export default function MessagesContainer({
   useEffect(() => {
     const checkOverflow = () => {
       if (messagesContainerRef.current) {
-        setIsOverflowing(messagesContainerRef.current.scrollHeight > messagesContainerRef.current.clientHeight);
+        setIsOverflowing(
+          messagesContainerRef.current.scrollHeight >
+            messagesContainerRef.current.clientHeight
+        );
       }
     };
     checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
   }, [allMessages]);
 
   useEffect(() => {
     if (lastMessageRef.current && messagesContainerRef.current) {
       // Only auto-scroll if user is already near the bottom or if it's the first load
       const container = messagesContainerRef.current;
-      const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
-      
+      const isNearBottom =
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 100;
+
       if (isNearBottom || allMessages.length === 1) {
         lastMessageRef.current.scrollIntoView({
           behavior: "smooth",
@@ -75,9 +85,11 @@ export default function MessagesContainer({
   }, [allMessages]);
 
   // Helper function to find the message that another message is replying to
-  const findReplyToMessage = (message: NylasMessage | NylasMessageWithContact) => {
+  const findReplyToMessage = (
+    message: NylasMessage | NylasMessageWithContact
+  ) => {
     if (!message.replyToMessageId || !allMessages) return undefined;
-    return allMessages.find(msg => msg.id === message.replyToMessageId);
+    return allMessages.find((msg) => msg.id === message.replyToMessageId);
   };
 
   const handleSendReply = () => {
@@ -93,7 +105,7 @@ export default function MessagesContainer({
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendReply();
     }
@@ -102,18 +114,23 @@ export default function MessagesContainer({
   // Calculate separator states once for all messages for a top-down view
   const separatorStates = useMemo(() => {
     if (!allMessages || allMessages.length === 0) return [];
-    
-    const firstTodayIndex = allMessages.findIndex(m => isMessageFromToday(m.date));
-    const firstUnreadIndex = allMessages.findIndex(m => m.unread);
+
+    const firstTodayIndex = allMessages.findIndex((m) =>
+      isMessageFromToday(m.date)
+    );
+    const firstUnreadIndex = allMessages.findIndex((m) => m.unread);
 
     return allMessages.map((message, index) => {
       const isFirstMessage = index === 0;
-      const isFirstOfToday = index === firstTodayIndex && firstTodayIndex !== -1;
-      const isFirstUnread = index === firstUnreadIndex && firstUnreadIndex !== -1;
+      const isFirstOfToday =
+        index === firstTodayIndex && firstTodayIndex !== -1;
+      const isFirstUnread =
+        index === firstUnreadIndex && firstUnreadIndex !== -1;
 
       const showChatBeginning = isFirstMessage;
       const showTodaySeparator = isFirstOfToday && !showChatBeginning;
-      const showNewSeparator = isFirstUnread && !showChatBeginning && !showTodaySeparator;
+      const showNewSeparator =
+        isFirstUnread && !showChatBeginning && !showTodaySeparator;
 
       return {
         showChatBeginning,
@@ -125,7 +142,7 @@ export default function MessagesContainer({
 
   return (
     <div className="w-full h-full flex flex-col gap-2">
-      <div 
+      <div
         ref={messagesContainerRef}
         className="flex-1 flex flex-col gap-2 overflow-y-auto"
       >
@@ -138,16 +155,21 @@ export default function MessagesContainer({
         {messagesError && <div className="p-4">{messagesError}</div>}
         {/* Spacer for short conversations */}
         {!isOverflowing && <div className="flex-1"></div>}
-        
+
         {allMessages &&
           user &&
           allMessages.length > 0 &&
           allMessages.map((message, index) => {
             const replyToMsg = findReplyToMessage(message);
             const separators = separatorStates[index];
-            
+
             return (
-              <div ref={index === allMessages.length - 1 ? lastMessageRef : undefined} key={message.id}>
+              <div
+                ref={
+                  index === allMessages.length - 1 ? lastMessageRef : undefined
+                }
+                key={message.id}
+              >
                 <SingleMessage
                   user={serializedUser}
                   message={message}
@@ -162,6 +184,9 @@ export default function MessagesContainer({
               </div>
             );
           })}
+      </div>
+      <div className="flex items-center gap-4 h-2 text-[#E4E7EC] text-sm">
+        <span className="w-full border-t border-[#E4E7EC] mb-4 mx-4"></span>
       </div>
 
       {/* Inline Reply Composer */}
