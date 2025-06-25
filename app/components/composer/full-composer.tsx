@@ -3,7 +3,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import {
   PaperAirplaneIcon,
   XMarkIcon,
-  ArrowsPointingOutIcon,
   TrashIcon,
   ArrowUturnLeftIcon,
 } from "@heroicons/react/24/outline";
@@ -66,8 +65,10 @@ export default function FullComposer({
     });
   };
 
-  const composerTitle = replyToMessage 
-    ? (composedMessage.isReply ? "Reply to Message" : "Respond to Message")
+  const composerTitle = replyToMessage
+    ? composedMessage.isReply
+      ? "Reply to Message"
+      : "Respond to Message"
     : "New Message";
 
   return (
@@ -81,13 +82,52 @@ export default function FullComposer({
         <div className="flex justify-between items-center px-4 py-4 bg-[#f3f4f7] rounded-t-xl">
           <h3 className="text-md font-medium">{composerTitle}</h3>
           <div className="flex gap-2">
+            {/* maximize/minimize */}
             <button
               disabled={disabledForm}
               className="p-1 hover:bg-gray-200 rounded disabled:opacity-50 disabled:hover:bg-transparent"
               onClick={() => setIsMaximized(!isMaximized)}
             >
-              <ArrowsPointingOutIcon className="w-5 h-5" />
+              {!isMaximized ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="M15 3h6v6" />
+                  <path d="m21 3-7 7" />
+                  <path d="m3 21 7-7" />
+                  <path d="M9 21H3v-6" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="m14 10 7-7" />
+                  <path d="M20 10h-6V4" />
+                  <path d="m3 21 7-7" />
+                  <path d="M4 14h6v6" />
+                </svg>
+              )}
             </button>
+
+            {/* close */}
             <button
               disabled={disabledForm}
               onClick={onClose}
@@ -105,10 +145,17 @@ export default function FullComposer({
               <ArrowUturnLeftIcon className="w-4 h-4 flex-shrink-0" />
               <div className="flex items-center gap-2 min-w-0">
                 <span className="text-[#344054] font-medium flex-shrink-0">
-                  Replying to {replyToMessage.derivedContact.nylasContact?.given_name || replyToMessage.derivedContact.derivedName}:
+                  Replying to{" "}
+                  {replyToMessage.derivedContact.nylasContact?.given_name ||
+                    replyToMessage.derivedContact.derivedName}
+                  :
                 </span>
                 <span className="text-[#667085] truncate">
-                  {replyToMessage.snippet || replyToMessage.body.replace(/<[^>]*>/g, '').substring(0, 80)}...
+                  {replyToMessage.snippet ||
+                    replyToMessage.body
+                      .replace(/<[^>]*>/g, "")
+                      .substring(0, 80)}
+                  ...
                 </span>
               </div>
             </div>
@@ -206,7 +253,9 @@ export default function FullComposer({
               apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
               value={composedMessage.body}
               onEditorChange={(content) =>
-                disabledForm ? undefined : onChange({ ...composedMessage, body: content })
+                disabledForm
+                  ? undefined
+                  : onChange({ ...composedMessage, body: content })
               }
               init={{
                 height: "100%",
