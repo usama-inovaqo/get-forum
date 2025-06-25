@@ -22,16 +22,19 @@ export default function SidebarContact({
 
   return (
     <button
-      className={`w-full flex items-center rounded-xl py-4 px-2 hover:bg-gray-50 ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
+      className={`w-full flex items-center justify-between rounded-xl py-4 hover:bg-gray-50 ${selectedContact?.nylasContact?.id === contact.nylasContact?.id
         ? "bg-[#F9FAFB]"
         : ""
         }`}
       onClick={() => onSelectContact(contact)}
     >
-      <div className="col-span-10 sm:col-span-2 siz-10 rounded-full">
+      {/* profile picture */}
+      <div className="size-10 rounded-full">
         <SidebarContactProfilePicture contact={contact} />
       </div>
-      <div className="col-span-6 flex flex-col items-start overflow-hidden">
+
+      {/* contact info */}
+      <div className="flex flex-col items-start overflow-hidden">
         <div className="flex items-center gap-1">
           <div className="w-full truncate">
             {contactNameFallback(contact)}
@@ -55,7 +58,9 @@ export default function SidebarContact({
           )}
         </div>
       </div>
-      <div className="col-span-2 text-[#667085] hidden text-xs sm:text-sm sm:flex sm:flex-col">
+
+      {/* time */}
+      <div className="text-[#667085] hidden text-xs sm:text-sm sm:flex sm:flex-col">
         {timeReceived}
       </div>
     </button>

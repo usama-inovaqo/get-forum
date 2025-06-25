@@ -237,8 +237,8 @@ export default function Sidebar({
 
   // Sidebar content
   const sidebarContent = (
-    <div className="h-full col-span-2 px-2 flex flex-col gap-4 justify-between overflow-y-auto bg-white shadow-lg">
-      <div className="flex flex-col gap-2">
+    <div className="h-full col-span-2 px-2 flex flex-col bg-white shadow-lg">
+      <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
         {/* header */}
         <div className="flex items-center justify-between">
           <div>
@@ -312,17 +312,20 @@ export default function Sidebar({
       {/* Desktop sidebar */}
       <div className="hidden md:block h-full col-span-2">{sidebarContent}</div>
       {/* Mobile drawer */}
-      {(
+      {
         <>
           {/* Backdrop */}
           <div
-            className={`fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:hidden ${isDrawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            className={`fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:hidden ${
+              isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
             onClick={onCloseDrawer}
             aria-label="Close sidebar backdrop"
           />
           {/* Drawer */}
-          <div className={`fixed top-0 left-0 z-50 h-full w-full max-w-xs bg-white shadow-2xl transition-transform duration-300 md:hidden flex flex-col
-            ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          <div
+            className={`fixed top-0 left-0 z-50 h-full w-full max-w-xs bg-white shadow-2xl transition-transform duration-300 md:hidden flex flex-col
+            ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"}`}
           >
             {/* Close button */}
             <button
@@ -330,14 +333,27 @@ export default function Sidebar({
               onClick={onCloseDrawer}
               aria-label="Close sidebar"
             >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
-            <div className="pt-12">{sidebarContent}</div>
+            <div className="pt-12 h-full flex flex-col overflow-hidden">
+              {sidebarContent}
+            </div>
           </div>
         </>
-      )}
+      }
     </>
   );
 }

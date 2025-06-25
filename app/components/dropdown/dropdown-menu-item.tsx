@@ -9,7 +9,7 @@ function DropdownMenuItem({ onClick, children }: DropdownMenuItemProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left hover:bg-[#F9FAFB] p-1 rounded-md"
+      className="w-full text-gray-900 text-left hover:bg-[#F9FAFB] p-1 rounded-md"
     >
       {children}
     </button>

@@ -98,8 +98,19 @@ export default function ConversationContainer({
         onClick={() => setSidebarOpen(true)}
         aria-label="Open sidebar"
       >
-        <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        <svg
+          width="28"
+          height="28"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       </button>
       <div className="h-full overflow-hidden grid grid-cols-10 bg-[#fcfcfd] divide-x-2 divide-[#D0D5DD] text-gray-900">
@@ -119,7 +130,7 @@ export default function ConversationContainer({
           onCloseDrawer={() => setSidebarOpen(false)}
         />
         {/* Empty Conversation (no contacts selected) */}
-        <div className="col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
+        <div className="col-span-10 md:col-span-8 h-full flex flex-col justify-between overflow-hidden bg-white">
           {!conversation?.selectedContacts.length && (
             <div className="bg-[#F2F4F7] flex justify-center items-center h-full rounded-xl m-4">
               <div className="flex flex-col items-center justify-center gap-2">
