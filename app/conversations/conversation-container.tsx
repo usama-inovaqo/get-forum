@@ -119,9 +119,9 @@ export default function ConversationContainer({
     };
 
     // Find the original message with contact info for proper quoting
-    const originalMessageWithContact = useableContacts.contacts.find(
-      contact => contact.email === originalMessage.from[0].email
-    );
+    // const originalMessageWithContact = useableContacts.contacts.find(
+    //   contact => contact.email === originalMessage.from[0].email
+    // );
 
     // Create the message with contact info for display
     const newReplyMessageWithContact: NylasMessageWithContact = {

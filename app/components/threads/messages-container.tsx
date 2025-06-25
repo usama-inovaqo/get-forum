@@ -75,7 +75,7 @@ export default function MessagesContainer({
   }, [allMessages]);
 
   // Helper function to find the message that another message is replying to
-  const findReplyToMessage = (message: any) => {
+  const findReplyToMessage = (message: NylasMessage | NylasMessageWithContact) => {
     if (!message.replyToMessageId || !allMessages) return undefined;
     return allMessages.find(msg => msg.id === message.replyToMessageId);
   };
