@@ -61,7 +61,7 @@ export default function SidebarContact({
 
       {/* time */}
       <div className="text-[#667085] text-xs">
-        {timeReceived}
+        {timeReceived}pm
       </div>
     </button>
   );
