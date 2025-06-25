@@ -4,6 +4,8 @@ import { NylasMessage, NylasMessageWithContact } from "@/app/types/messages.type
 import { Conversation } from "@/app/conversations/conversations.types";
 import MessagesContainer from "./messages-container";
 import ParticipantsHeader from "../participants-header/participants-header";
+import ThreadsLoading from "./threads-loading";
+import NoThreadsFound from "./no-threads-found";
 
 type ThreadsProps = {
   conversation: Conversation;
@@ -24,8 +26,13 @@ const ThreadsContainer = memo(function Threads({
   onCancelReply,
   dynamicReplies,
 }: ThreadsProps) {
+  // Memoize participant emails to prevent unnecessary re-renders
+  const participantEmails = useMemo(() => {
+    return conversation.selectedContacts.map((contact) => contact.email);
+  }, [conversation.selectedContacts]);
+
   const { threads, isLoading, error } = useThreads(
-    conversation.selectedContacts.map((contact) => contact.email),
+    participantEmails,
     10,
     30000
   );
@@ -48,30 +55,33 @@ const ThreadsContainer = memo(function Threads({
 
   return (
     <div className="h-full overflow-hidden flex flex-col p-4">
-      <div className="flex flex-col gap-2 border-b border-[#D0D5DD] bg-white sticky top-0 mx-4">
-        <ParticipantsHeader participants={conversation.selectedContacts} />
-      </div>
-      <div className="col-span-2 flex gap-4 justify-between h-full overflow-y-auto">
-        {isLoading && <div className="p-4">Loading threads...</div>}
-        {error && <div className="p-4">{error}</div>}
-
-        {!isLoading && !error && !threads.length && (
-          <div className="p-4">No threads found</div>
-        )}
-        {!isLoading && !error && threads.length > 0 && (
-          <div className="w-full h-full flex">
-            <MessagesContainer
-              messageIds={messageIdsForAllMessagesInThread}
-              onRespondToMessage={onRespondToMessage}
-              onReplyToMessage={onReplyToMessage}
-              replyToMessage={replyToMessage}
-              onSendReply={onSendReply}
-              onCancelReply={onCancelReply}
-              dynamicReplies={dynamicReplies}
-            />
+      {isLoading ? (
+        <ThreadsLoading />
+      ) : (
+        <>
+          <div className="flex flex-col gap-2 border-b border-[#D0D5DD] bg-white sticky top-0 mx-4">
+            <ParticipantsHeader participants={conversation.selectedContacts} />
           </div>
-        )}
-      </div>
+          <div className="flex-1 min-h-0 flex flex-col">
+            {error && <div className="p-4">{error}</div>}
+
+            {!error && !threads.length && (
+              <NoThreadsFound />
+            )}
+            {!error && threads.length > 0 && (
+              <MessagesContainer
+                messageIds={messageIdsForAllMessagesInThread}
+                onRespondToMessage={onRespondToMessage}
+                onReplyToMessage={onReplyToMessage}
+                replyToMessage={replyToMessage}
+                onSendReply={onSendReply}
+                onCancelReply={onCancelReply}
+                dynamicReplies={dynamicReplies}
+              />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 });

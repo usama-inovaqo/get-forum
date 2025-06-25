@@ -1,6 +1,6 @@
 import { ForumContactsResponse, NylasContact, ForumContact } from "../types/contacts.types";
-import { NylasMessage, NylasMessageWithContact } from "../types/messages.types";
-import { NylasThread, ForumThreadWithContact } from "../types/threads.types";
+import { NylasMessageWithContact } from "../types/messages.types";
+import { ForumThreadWithContact } from "../types/threads.types";
 import { FetchDataResponse } from "../types/api.types";
 
 // Mock Nylas Contacts
@@ -32,12 +32,46 @@ export const mockNylasContacts: NylasContact[] = [
     object: "contact",
     phone_numbers: ["+0987654321"],
     physical_addresses: [],
-    picture_url: "https://images.unsplash.com/photo-1494790108755-2616b332c9c1?w=150&h=150&fit=crop&crop=face",
+    picture_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
     surname: "Smith",
     source: "nylas",
     web_pages: [],
     updated_at: 1704067200,
     job_title: "Product Manager",
+  },
+  {
+    emails: [{ email: "emily.davis@example.com" }],
+    given_name: "Emily",
+    grant_id: "grant_123",
+    groups: [{ id: "group_1" }],
+    id: "contact_5",
+    im_addresses: [],
+    object: "contact",
+    phone_numbers: ["+1627384950"],
+    physical_addresses: [],
+    picture_url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+    surname: "Davis",
+    source: "nylas",
+    web_pages: [],
+    updated_at: 1704067200,
+    job_title: "Marketing Lead",
+  },
+  {
+    emails: [{ email: "david.chen@example.com" }],
+    given_name: "David",
+    grant_id: "grant_123",
+    groups: [{ id: "group_2" }],
+    id: "contact_6",
+    im_addresses: [],
+    object: "contact",
+    phone_numbers: ["+1987654321"],
+    physical_addresses: [],
+    picture_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    surname: "Chen",
+    source: "nylas",
+    web_pages: [],
+    updated_at: 1704067200,
+    job_title: "Data Analyst",
   },
   // {
   //   emails: [{ email: "mike.wilson@acme.com" }],

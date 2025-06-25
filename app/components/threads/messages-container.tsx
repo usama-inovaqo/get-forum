@@ -55,16 +55,22 @@ export default function MessagesContainer({
       }
     };
     checkOverflow();
-    window.addEventListener('resize', checkOverflow); // Check on resize
+    window.addEventListener('resize', checkOverflow);
     return () => window.removeEventListener('resize', checkOverflow);
   }, [allMessages]);
 
   useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
+    if (lastMessageRef.current && messagesContainerRef.current) {
+      // Only auto-scroll if user is already near the bottom or if it's the first load
+      const container = messagesContainerRef.current;
+      const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
+      
+      if (isNearBottom || allMessages.length === 1) {
+        lastMessageRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      }
     }
   }, [allMessages]);
 
@@ -121,7 +127,7 @@ export default function MessagesContainer({
     <div className="w-full h-full flex flex-col gap-2">
       <div 
         ref={messagesContainerRef}
-        className={`flex-1 flex flex-col gap-2 overflow-y-auto ${!isOverflowing ? 'justify-end' : 'justify-start'}`}
+        className="flex-1 flex flex-col gap-2 overflow-y-auto"
       >
         {isMessagesLoading && (
           <div className="flex flex-col gap-2">
@@ -130,6 +136,9 @@ export default function MessagesContainer({
           </div>
         )}
         {messagesError && <div className="p-4">{messagesError}</div>}
+        {/* Spacer for short conversations */}
+        {!isOverflowing && <div className="flex-1"></div>}
+        
         {allMessages &&
           user &&
           allMessages.length > 0 &&
